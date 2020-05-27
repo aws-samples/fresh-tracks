@@ -1,0 +1,73 @@
+{
+    "version": "0",
+    "id": "8753e4d3-07b3-b3da-e321-422b16d6ddfc",
+    "detail-type": "AWS API Call via CloudTrail",
+    "source": "aws.s3",
+    "account": "018204829476",
+    "time": "2020-03-30T08:58:01Z",
+    "region": "eu-west-1",
+    "resources": [],
+    "detail": {
+      "eventVersion": "1.07",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROAQIPIXU4SC7QW3YSST:FreshTracks-getSignedUrlS3-3HT21NREOA1C",
+        "arn": "arn:aws:sts::018204829476:assumed-role/FreshTracks-getSignedUrlS3Role-1BGND13625EA7/FreshTracks-getSignedUrlS3-3HT21NREOA1C",
+        "accountId": "018204829476",
+        "accessKeyId": "ASIAQIPIXU4SBOIHRIYV",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROAQIPIXU4SC7QW3YSST",
+            "arn": "arn:aws:iam::018204829476:role/FreshTracks-getSignedUrlS3Role-1BGND13625EA7",
+            "accountId": "018204829476",
+            "userName": "FreshTracks-getSignedUrlS3Role-1BGND13625EA7"
+          },
+          "attributes": {
+            "creationDate": "2020-03-30T08:47:11Z",
+            "mfaAuthenticated": "false"
+          }
+        }
+      },
+      "eventTime": "2020-03-30T08:58:01Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "PutObject",
+      "awsRegion": "eu-west-1",
+      "sourceIPAddress": "54.240.197.224",
+      "userAgent": "[Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:75.0) Gecko/20100101 Firefox/75.0]",
+      "requestParameters": {
+        "bucketName": "freshtracks-freshtrackss3bucket-16ns4y6asiuq0",
+        "x-amz-meta-user-id": "amazon|amzn1.account.AHFGFHMDZGF4GOT6HWRSDVO6TKKA",
+        "Host": "freshtracks-freshtrackss3bucket-16ns4y6asiuq0.s3.eu-west-1.amazonaws.com",
+        "Expires": "1585562280",
+        "key": "sample.gpx"
+      },
+      "responseElements": null,
+      "additionalEventData": {
+        "SignatureVersion": "SigV2",
+        "CipherSuite": "ECDHE-RSA-AES128-GCM-SHA256",
+        "bytesTransferredIn": 1630,
+        "AuthenticationMethod": "QueryString",
+        "x-amz-id-2": "N7WMKUQALQtAPXU3/6fsMvmaKAlQgcYXepRtuNu9TXwoaQMeFmkhIaMoEswTD/2CFhy+EnArZsM=",
+        "bytesTransferredOut": 0
+      },
+      "requestID": "125F89CFC46CF10F",
+      "eventID": "2532b627-92a8-4f0b-86ab-a5ef3a2a7b25",
+      "readOnly": false,
+      "resources": [
+        {
+          "type": "AWS::S3::Object",
+          "ARN": "arn:aws:s3:::freshtracks-freshtrackss3bucket-16ns4y6asiuq0/sample.gpx"
+        },
+        {
+          "accountId": "018204829476",
+          "type": "AWS::S3::Bucket",
+          "ARN": "arn:aws:s3:::freshtracks-freshtrackss3bucket-16ns4y6asiuq0"
+        }
+      ],
+      "eventType": "AwsApiCall",
+      "managementEvent": false,
+      "recipientAccountId": "018204829476",
+      "eventCategory": "Data"
+    }
+  }

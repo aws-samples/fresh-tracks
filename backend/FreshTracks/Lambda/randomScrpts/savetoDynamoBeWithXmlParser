@@ -1,0 +1,76 @@
+//var AWS = require('aws-sdk');
+//const documentClient = new AWS.DynamoDB.DocumentClient()    
+const  xml2js = require('xml2js');
+var parser = new xml2js.Parser({explicitArray : false});
+
+const headers = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': "Content-Type",
+  "Access-Control-Allow-Methods": "OPTIONS,POST"
+}
+
+exports.handler = async(event, context) => {
+    formData = event.body
+    xml =  event.body.xmlData
+    xml = xml.replace('\"', '"').replace('\\n', '');
+ 
+    parser.parseString(xml, function (err, parsedXml) {
+    var iterate= parsedXml.gpx.trk.trkseg
+  
+    console.log(iterate)
+  
+    console.log(iterate[0])
+
+    for(var i=1; i<iterate.length-1; i++){
+        console.log(iterate[i])
+            var point= iterate[i];
+            
+            console.log(point.trkpt.ele +" less than "+iterate[i-1].trkpt.ele+"? and "+point.ele+" more than "+iterate[i+1].trkpt.ele  )
+
+            if (point.trkpt.ele <  iterate[i-1].trkpt.ele && point.trkpt.ele > iterate[i+1].trkpt.ele ){ // check if plot is high than the previous... GOING UP
+            
+              console.log('TRUE')
+            console.log('SO '+iterate[i-1].trkpt.trkpt.ele+" less than "+iterate[i-2].trkpt.trkpt.ele+"? and "+iterate[i+1].trkpt.trkpt.ele+" more than of ="+iterate[i+2].trkpt.ele  )
+
+                  if(iterate[i-1].trkpt.ele <= iterate[i-2].trkpt.ele && iterate[i+1].trkpt.ele >= iterate[i+2].trkpt.ele){
+                      console.log('end and start at index:'+i+' value'+point.trkpt.ele) // i is the stard of a new run and end of a left
+                  }
+            }
+
+        }  
+    
+
+    });
+
+
+
+
+
+
+
+  
+    var params = {
+      TableName : process.env.FreshTracksDbTable,
+      Item: {
+        ID: Math.floor(Math.random() * Math.floor(10000000)).toString(),
+        activity: formData,   //stringify to store against empty responses in form 
+        created: Math.floor(Date.now() / 1000),
+        userId:formData.email
+      }
+    }
+    try {
+      var data =1
+        //var data = await documentClient.put(params).promise()
+    }
+    catch (err) {
+        console.log(err)
+        return err
+    }
+    console.log(data)
+    return {
+          statusCode: 200,
+          body: 'OK!',
+          headers,
+      }
+}

@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "FreshTracks"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-12o3g3x0szjnk"
+s3_prefix = "FreshTracks"
+region = "eu-west-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Auth0EventBusName=\"aws.partner/auth0.com/bls20-4e16eb14-5374-4458-904c-4e17adad5a38/auth0.logs\" Auth0Domain=\"bls20.auth0.com\" Auth0Audience=\"https://myfreshtracks.com\" Auth0ClientId=\"QP19oglIMqRDlNoy2kOykclw2lbcxPh8\" ZendeskEventBusName=\"aws.partner/zendesk.com/9382841/default\" ZenDeskDomain=\"d3v-amazon.zendesk\" ZenDeskPassword=\"xufgdKrYQOVn3m4vlLJbT9YnM6djFxYzWObf8K94\" ZenDeskUsername=\"benjasl@amazon.com\""
+
