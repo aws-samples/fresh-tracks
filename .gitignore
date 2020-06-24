@@ -3,7 +3,8 @@ node_modules
 /dist
 backend/node_modules
 backend/Lambda/node_modules
-
+#sam
+backend/FreshTracks/samconfig.toml
 
 
 # local env files
