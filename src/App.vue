@@ -15,29 +15,49 @@ SPDX-License-Identifier: MIT-0 */
       <div class="logo"></div>
       <p>
         Source code available on Github
-      
       </p>
       </a>
+        <p class="site-footer__copy">
+              <a href="https://aws.amazon.com/privacy/">Privacy</a> | 
+              <a href="https://aws.amazon.com/terms/">Site Terms</a> | 
+              <a href="#" @click="showCookie">Cookie Preferences</a> | 
+              &copy; Copyright 2020 Amazon.com, Inc. or its affiliates. All rights reserved.
+        </p><!-- /.site-footer__copy -->
+
     </footer>
   </div>
 </template>
 
+
+<script src="/assets/scripts/shortbreadv1.js"></script>
+
 <script>
+
+
+
 import NavBar from "./components/NavBar";
 import Error from "./components/Error";
 
 
 
-
-
+   const shortbread = AWSCShortbread({
+    domain: "myfreshtracks.com"
+   });
 
 export default {
+  
   components: {
     NavBar,
     Error
   },
+  methods:{
+         showCookie () {
+         shortbread.customizeCookies();
+      }
+  },
   mounted(){
-
+       //Shows GDPR cookie consent on first load (only if visitor is in affected geography)
+       shortbread.checkForCookieConsent();
 
   }
 };

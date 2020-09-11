@@ -2,6 +2,10 @@
 // SPDX-License-Identifier: MIT-0
 
 import Vue from "vue";
+
+import './assets/scripts/shortbreadv1.js';
+ 
+
 import App from "./App.vue";
 import router from "./router";
 import { Auth0Plugin } from "./auth";
@@ -10,6 +14,7 @@ import HighlightJs from "./directives/highlight";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faLink, faUser, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 
 
 //******  STEP 1. Un comment the "import" line below *********************** /
@@ -36,9 +41,6 @@ Vue.config.productionTip = false;
       );
     }
   });
-
-
-
 
 
 

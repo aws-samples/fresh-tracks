@@ -24,7 +24,7 @@ SPDX-License-Identifier: MIT-0 */
 </template>
 <script>
 import Map from "../components/Map";
-import Upload from "../components/Upload";
+//import Upload from "../components/Upload";
 import List from "../components/List";
 import Dropzone from '../components/Dropzone'
 
