@@ -92,14 +92,18 @@ Parameters:
 Globals:
   Function:
     Timeout: 10
+    Tracing: Active
+    Tags:
+      Application: FreshTracks 
   Api:
     # enable CORS; to make more specific, change the origin wildcard
     # to a particular domain name, e.g. "'www.example.com'"
     EndpointConfiguration: EDGE
+    TracingEnabled: TRUE
     Cors: 
       AllowMethods: "'OPTIONS,POST'"
       AllowHeaders: "'Content-Type'"
-      AllowOrigin: "'*'"   
+      AllowOrigin: "'*'"
 Resources:
 ##########################################################################
 #  Amplify Console Set up                                                #
@@ -141,6 +145,8 @@ Resources:
         Authorizers:
           MyLambdaTokenAuthorizer:
             FunctionArn: !GetAtt MyAuthFunction.Arn
+      Tags:
+        Application: FreshTracks 
 ##########################################################################
 #  S3 Buckets                                                            #
 ##########################################################################
@@ -604,6 +610,7 @@ Resources:
   FreshTracksGPXUploadMachine:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
+
       DefinitionString: !Sub |
               {
                 "Comment": "Process GPX file upload",
@@ -630,7 +637,8 @@ Resources:
                 }
               }
       RoleArn: !GetAtt [ MyStatesExecutionRole, Arn ]
-
+      TracingConfiguration: 
+        Enabled: True
 
 
   FreshTracksZenDeskStateMachine:
@@ -667,6 +675,8 @@ Resources:
                     }
                 }
       RoleArn: !GetAtt [ MyStatesExecutionRole, Arn ]
+      TracingConfiguration: 
+        Enabled: True      
 ##########################################################################
 #   Roles                                                                #
 ##########################################################################
