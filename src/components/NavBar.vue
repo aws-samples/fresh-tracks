@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 <template>
   <div class="nav-container mb-3">
     <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -108,7 +109,9 @@ export default {
     zenDeskWidget(){
         var self = this
 
+         // eslint-disable-next-line no-undef
          zE('webWidget:on', 'open', function() {
+           // eslint-disable-next-line no-undef
            zE('webWidget', 'updateSettings', {
               webWidget: {
                 contactForm: {
@@ -132,6 +135,7 @@ export default {
             });
 
              if(self.$auth.isAuthenticated){
+                // eslint-disable-next-line no-undef
                 zE('webWidget', 'updateSettings', {
                   webWidget: {
                     contactForm: {
@@ -154,7 +158,7 @@ export default {
       }
   },
   mounted(){
-    //this.zenDeskWidget()
+    this.zenDeskWidget()
   }
 };
 </script>
