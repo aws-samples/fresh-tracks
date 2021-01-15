@@ -60,12 +60,12 @@
 </template>
 
 <script>
-//import { latLng } from "leaflet";
+import { latLng } from "leaflet";
 import 'leaflet-gpx';
 
 import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from "vue2-leaflet";
 import axios from 'axios';
-
+require 
 
 
 export default {
@@ -110,7 +110,7 @@ export default {
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
     },
-    centerUpdate() {
+    centerUpdate(center) {
       this.currentCenter = 'gpx.getBounds().getCenter()';
     },
     showLongText() {

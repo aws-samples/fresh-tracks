@@ -15,9 +15,9 @@ Metadata:
     LicenseUrl: LICENSE.txt
     ReadmeUrl: README.md
     Labels: ['Lambda', 'Step-Functions','API-Gateway', 'DynamoDB', 'forms']
-    HomePageUrl: https://github.com/bls20AWS/FreshTracks
+    HomePageUrl: https://github.com/aws-samples/FreshTracks
     SemanticVersion: 0.0.1
-    SourceCodeUrl: https://github.com/bls20AWS/FreshTracks
+    SourceCodeUrl: https://github.com/aws-samples/FreshTracks
 
 
 ##########################################################################

@@ -11,7 +11,7 @@ SPDX-License-Identifier: MIT-0 */
       </div>
     </div>
     <footer class="bg-light text-center p-3">
-        <a href="https://github.com/bls20AWS/freshTracks">
+        <a href="https://github.com/aws-samples/freshTracks">
       <div class="logo"></div>
       <p>
         Source code available on Github
@@ -27,9 +27,6 @@ SPDX-License-Identifier: MIT-0 */
     </footer>
   </div>
 </template>
-
-
-<script src="/assets/scripts/shortbreadv1.js"></script>
 
 <script>
 

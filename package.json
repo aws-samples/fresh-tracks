@@ -14,14 +14,14 @@
     "@fortawesome/vue-fontawesome": "^0.1.7",
     "aws-iot-device-sdk": "^2.2.3",
     "aws-sdk": "^2.646.0",
-    "axios": "^0.19.2",
+    "axios": ">=0.21.1",
     "core-js": "^2.6.9",
     "dropzone": "^5.7.0",
     "express": "^4.17.1",
-    "highlight.js": "^9.15.10",
+    "highlight.js": "^9.11.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.7.0",
-    "leaflet": "^1.6.0",
+    "leaflet": "^1.7.1",
     "leaflet-gpx": "^1.5.0",
     "leaflet-providers": "^1.9.1",
     "lmap": "^0.1.24",
@@ -65,12 +65,17 @@
       "eslint:recommended"
     ],
     "rules": {
+      "globals": {
+        "L": "writable"
+      },
+      "no-unused-vars": "off",
       "no-console": [
         "error",
         {
           "allow": [
             "error",
-            "warn"
+            "warn",
+            "log"
           ]
         }
       ]
