@@ -13,12 +13,12 @@
                 </tr>
                </thead> 
                {{ message }}
-                <tr v-for="item in activities">
+                <tr v-for="(item,index) in activities" :key="item.index">
                  <!--  <td>
                     {{ JSON.parse(item.metadata.S).gpxMeta.time }}
                   </td> -->
                   <td>
-                    <a v-bind:href="'/activities?ID='+ item.ID.S ">{{ JSON.parse(item.metadata.S).gpxMeta.name }} </a>
+                    <a v-bind:id="index" v-bind:href="'/activities?ID='+ item.ID.S ">{{ JSON.parse(item.metadata.S).gpxMeta.name }} </a>
                   </td>
                   <td>
                     <a v-bind:href="'/activities?ID='+ item.ID.S ">{{ parseInt(JSON.parse(item.metadata.S).gpxMeta['length']) }} km </a>
