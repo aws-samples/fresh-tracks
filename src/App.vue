@@ -11,7 +11,7 @@ SPDX-License-Identifier: MIT-0 */
       </div>
     </div>
     <footer class="bg-light text-center p-3">
-        <a href="https://github.com/aws-samples/freshTracks">
+        <a href="https://github.com/aws-samples/fresh-Tracks">
       <div class="logo"></div>
       <p>
         Source code available on Github
