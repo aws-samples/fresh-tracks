@@ -2,10 +2,6 @@
 // SPDX-License-Identifier: MIT-0
 
 import Vue from "vue";
-
-import './assets/scripts/shortbreadv1.js';
- 
-
 import App from "./App.vue";
 import router from "./router";
 import { Auth0Plugin } from "./auth";

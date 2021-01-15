@@ -36,26 +36,12 @@ import NavBar from "./components/NavBar";
 import Error from "./components/Error";
 
 
-
-   const shortbread = AWSCShortbread({
-    domain: "myfreshtracks.com"
-   });
-
 export default {
   
   components: {
     NavBar,
     Error
-  },
-  methods:{
-         showCookie () {
-         shortbread.customizeCookies();
-      }
-  },
-  mounted(){
-       //Shows GDPR cookie consent on first load (only if visitor is in affected geography)
-       shortbread.checkForCookieConsent();
-
   }
+  
 };
 </script>
