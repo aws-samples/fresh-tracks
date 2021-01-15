@@ -154,7 +154,7 @@ export default {
       }
   },
   mounted(){
-    this.zenDeskWidget()
+    //this.zenDeskWidget()
   }
 };
 </script>
