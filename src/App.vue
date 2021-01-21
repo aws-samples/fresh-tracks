@@ -19,8 +19,7 @@ SPDX-License-Identifier: MIT-0 */
       </a>
         <p class="site-footer__copy">
               <a href="https://aws.amazon.com/privacy/">Privacy</a> | 
-              <a href="https://aws.amazon.com/terms/">Site Terms</a> | 
-              <a href="#" @click="showCookie">Cookie Preferences</a> | 
+              <a href="https://aws.amazon.com/terms/">Site Terms</a> |
               &copy; Copyright 2020 Amazon.com, Inc. or its affiliates. All rights reserved.
         </p><!-- /.site-footer__copy -->
 
