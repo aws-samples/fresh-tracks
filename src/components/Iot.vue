@@ -18,7 +18,7 @@ export default {
     const AWSConfiguration = {
       poolId: process.env.VUE_APP_IdentityPoolId, // 'YourCognitoIdentityPoolId'
       host: process.env.VUE_APP_AwsIoTEndpoint, // 'YourAwsIoTEndpoint', e.g. 'prefix.iot.us-east-1.amazonaws.com'
-      region: 'eu-west-1' // 'YourAwsRegion', e.g. 'us-east-1'
+      region: process.env.VUE_APP_AWSRegion // 'YourAwsRegion', e.g. 'us-east-1'
     }
 
     const clientId = 'UpdateTable-'+this.$auth.user.sub+'-' + (Math.floor((Math.random() * 100000000) + 1))
