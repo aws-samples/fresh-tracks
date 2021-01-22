@@ -24,14 +24,6 @@ Metadata:
 #  Parameters & Globals                                                  #
 ##########################################################################
 Parameters:
-  Auth0EventBusName:
-    Type: String
-    Description: A valid custom Event Bus for Auth0 Events e.g. aws.partner/auth0.com/###########/auth0.logs.
-    MaxLength: 150
-    MinLength: 4
-    Default: "default"
-    AllowedPattern : ".+"
-
   Auth0Domain:
     Type: String
     Description: Your Auth0 App account domain.
@@ -53,39 +45,7 @@ Parameters:
     Description: your Auth0 API audience identifier e.g.  https://myfreshtracks.com.
     MaxLength: 150
     MinLength: 4
-    Default: "https://YourAPIIdentifier" 
-    AllowedPattern : ".+"
-
-  ZendeskEventBusName:
-    Type: String
-    Description: A valid custom Event Bus for Zendesk Events e.g. aws.partner/zendesk.com/######/default.
-    MaxLength: 150
-    MinLength: 4
-    Default: "default"
-    AllowedPattern : ".+"
-
-  ZenDeskDomain:
-    Type: String
-    Description: Valid Zendesk domain.
-    MaxLength: 150
-    MinLength: 4
-    Default: "example-domain.zendesk"
-    AllowedPattern : ".+"
-
-  ZenDeskPassword:
-    Type: String
-    Description: Valid Zendesk Password.
-    MaxLength: 150
-    MinLength: 4
-    Default: "abcfedghijllmnop12345678"
-    AllowedPattern : ".+"
-
-  ZenDeskUsername:
-    Type: String
-    Description: Valid Zendesk Username.
-    MaxLength: 150
-    MinLength: 4
-    Default: "email@address.com"
+    Default: "https://YourClientID" 
     AllowedPattern : ".+"
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
@@ -115,7 +75,7 @@ Resources:
       CustomRules: 
         - 
           Source: </^((?!\.(css|gif|ico|jpg|js|png|txt|svg|woff|ttf)$).)*$/>
-          Status: 200
+          Status: "200"
           Target: /index.html
       EnvironmentVariables: 
         - Name: "VUE_APP_APIGW_URL"
@@ -206,8 +166,6 @@ Resources:
                   - 
                     Ref: "FreshTracksS3Bucket"
                   - "/*"
-  FreshtracksUserActivitylogs:
-    Type: AWS::S3::Bucket
   
 ##########################################################################
 #  S3 Bucket Trails                                                      #
@@ -254,46 +212,6 @@ Resources:
 ##########################################################################
 #  Lambda functions                                                      #
 ##########################################################################
-
-  CreateZendeskArticle:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: Lambda/
-      Handler: CreateZendeskArticle.handler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Environment:
-        Variables:
-          ZenDeskDomain: !Ref ZenDeskDomain
-          ZenDeskPassword: !Ref ZenDeskPassword
-          ZenDeskUsername: !Ref ZenDeskUsername
-  
-  GetFullZendeskTicket:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: Lambda/
-      Handler: GetFullZendeskTicket.handler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Environment:
-        Variables:
-          ZenDeskDomain: !Ref ZenDeskDomain
-          ZenDeskPassword: !Ref ZenDeskPassword
-          ZenDeskUsername: !Ref ZenDeskUsername
-
-  GetFullZendeskUser:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: Lambda/
-      Handler: GetFullZendeskUser.handler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Environment:
-        Variables:
-          ZenDeskDomain: !Ref ZenDeskDomain
-          ZenDeskPassword: !Ref ZenDeskPassword
-          ZenDeskUsername: !Ref ZenDeskUsername
-          
   publishToIoT:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -312,19 +230,6 @@ Resources:
             Resource:
               - "*"
           Version: '2012-10-17'
-  SaveAuth0EventToS3:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: Lambda/
-      Handler: saveAuth0EventToS3.handler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Environment:
-        Variables:
-          AuthLogBucket: !Ref FreshtracksUserActivitylogs
-      Policies:
-        - S3CrudPolicy:
-            BucketName: !Ref FreshtracksUserActivitylogs
 
   saveToFreshTracksDatabaseTable:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -438,93 +343,6 @@ Resources:
 ##########################################################################
 #   EventBridge Rules                                                    #
 ##########################################################################
-
-  SuccessfullSignIn: 
-    Type: AWS::Events::Rule
-    Properties: 
-      Description: "Auth0 User Successfully signed in"
-      EventBusName: 
-         Ref: Auth0EventBusName
-      EventPattern: 
-        account:
-        - !Sub '${AWS::AccountId}'
-        detail:
-          data:
-            type:
-            - s
-      Targets: 
-        - 
-          Arn:
-            Fn::GetAtt:
-              - "SaveAuth0EventToS3" 
-              - "Arn"
-          Id: "SignInSuccessV1"
-
-  SuccessfullSignUp: 
-    Type: AWS::Events::Rule
-    Properties: 
-      Description: "Auth0 User Successfully signed up"
-      EventBusName: 
-         Ref: Auth0EventBusName
-      EventPattern: 
-        account:
-        - !Sub '${AWS::AccountId}'
-        detail:
-          data:
-            type:
-            - ss
-      Targets: 
-        - 
-          Arn:
-            Fn::GetAtt:
-              - "SaveAuth0EventToS3" 
-              - "Arn"
-          Id: "SignInSuccessV1"
-
-  SuccessfullSignOutSuccess: 
-    Type: AWS::Events::Rule
-    Properties: 
-      Description: "Auth0 User Successfully signed out"
-      EventBusName: 
-         Ref: Auth0EventBusName
-      EventPattern: 
-        account:
-        - !Sub '${AWS::AccountId}'
-        detail:
-          data:
-            type:
-            - slo
-      Targets: 
-        - 
-          Arn:
-            Fn::GetAtt:
-              - "SaveAuth0EventToS3" 
-              - "Arn"
-          Id: "SignInSuccessV1"
-
-  SignInFail: 
-    Type: AWS::Events::Rule
-    Properties: 
-      Description: "Auth0 User Signin failed"
-      EventBusName: 
-         Ref: Auth0EventBusName
-      EventPattern: 
-        account:
-        - !Sub '${AWS::AccountId}'
-        detail:
-          data:
-            type:
-            - fp
-            - f
-            - fu
-      Targets: 
-        - 
-          Arn:
-            Fn::GetAtt:
-              - "SaveAuth0EventToS3" 
-              - "Arn"
-          Id: "SignInSuccessV1"
-
   EventRuleCase1: 
     Type: AWS::Events::Rule
     Properties: 
@@ -548,46 +366,7 @@ Resources:
         - RoleArn: !GetAtt [ ScheduledEventIAMRole, Arn ]
           Arn: !Ref FreshTracksGPXUploadMachine
           Id: s3Object
-  
-  ZendeskNewWebQueryClosed: 
-    Type: AWS::Events::Rule
-    Properties: 
-      Description: "New Web Query"
-      EventBusName: 
-         Ref: ZendeskEventBusName
-      EventPattern: 
-        account:
-        - !Sub '${AWS::AccountId}'
-        detail-type: 
-        - "Support Ticket: Comment Created"
-        detail:
-          ticket_event:
-            ticket:
-              status: 
-              - solved
-              tags:
-              - web_widget
-              tags: 
-              - guide
-      Targets: 
-        - RoleArn: !GetAtt [ ScheduledEventIAMRole, Arn ]
-          Arn: !Ref FreshTracksZenDeskStateMachine
-          Id: NewQuery
 
-########################################################################
-#   Policies                                                           #
-########################################################################
-  PermissionForEventsToInvokeLambda: 
-    Type: AWS::Lambda::Permission
-    Properties: 
-      FunctionName: 
-        Ref: "SaveAuth0EventToS3"
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn: 
-        Fn::GetAtt: 
-          - "SuccessfullSignIn"
-          - "Arn"
 
 ##########################################################################
 #  Lambda Authorizer                                                      #
@@ -638,45 +417,7 @@ Resources:
               }
       RoleArn: !GetAtt [ MyStatesExecutionRole, Arn ]
       TracingConfiguration: 
-        Enabled: True
-
-
-  FreshTracksZenDeskStateMachine:
-    Type: "AWS::StepFunctions::StateMachine"
-    Properties:
-      StateMachineType: EXPRESS
-      DefinitionString: !Sub |
-               {
-                    "Comment": "Create a new article from a zendeskTicket",
-                    "StartAt": "GetFullZendeskTicket",
-                    "States": {
-
-                      "GetFullZendeskTicket": {
-                      "Comment": "Get Full Ticket Details",
-                      "Type": "Task",
-                      "ResultPath": "$.FullTicket",
-                      "Resource": "${GetFullZendeskTicket.Arn}",
-                      "Next": "GetFullZendeskUser"
-                      },
-                      "GetFullZendeskUser": {
-                      "Comment": "Get Full User Details",
-                      "Type": "Task",
-                      "ResultPath": "$.FullUser",
-                      "Resource": "${GetFullZendeskUser.Arn}",
-                      "Next": "PublishArticle"
-                      },
-                      "PublishArticle": {
-                      "Comment": "Publish as an article",
-                      "Type": "Task",
-                      "InputPath": "$",
-                      "Resource": "${CreateZendeskArticle.Arn}",
-                      "End": true
-                      }
-                    }
-                }
-      RoleArn: !GetAtt [ MyStatesExecutionRole, Arn ]
-      TracingConfiguration: 
-        Enabled: True      
+        Enabled: True   
 ##########################################################################
 #   Roles                                                                #
 ##########################################################################
@@ -704,7 +445,6 @@ Resources:
                 Action: "states:StartExecution"
                 Resource:
                   - !Ref FreshTracksGPXUploadMachine
-                  - !Ref FreshTracksZenDeskStateMachine
   
   MyStatesExecutionRole:
       Type: "AWS::IAM::Role"
@@ -840,32 +580,21 @@ Resources:
 #   Outputs                                                              #
 ##########################################################################
 Outputs:
-  apiGatewayInvokeURL:
+  VUEAPIAPIGWURL:
+    Description: "front end env APP_APIGW_URL: your API endpoint"
     Value: !Sub "https://${FreshTracksAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"
-  saveToFreshTracksDatabaseTable:
-    Description: "Lambda Function ARN"
-    Value: !GetAtt saveToFreshTracksDatabaseTable.Arn
-  saveToFreshTracksDatabaseTableIamRole:
-    Description: "Implicit IAM Role created for function"
-    Value: !GetAtt saveToFreshTracksDatabaseTableRole.Arn
-  IotEndpoint:
-    Description: "IoT topic Endpoint"
-    Value: !Ref FreshTracksRealtime
-  getSignedUrlS3:
-    Description: "Lambda Function ARN"
-    Value: !GetAtt getSignedUrlS3.Arn
-  getSignedUrlS3IamRole:
-    Description: "Implicit IAM Role created for function"
-    Value: !GetAtt getSignedUrlS3Role.Arn  
-  FreshTracksDatabaseTable:
-    Description: "DynamoDB Table"
-    Value: !Ref FreshTracksDatabaseTable
-  FreshTracksS3Bucket:
-    Description: "GPX file storage bucket"
-    Value: !Ref FreshTracksS3Bucket
-  FreshtracksUserActivitylogs:
-    Description: "Auth0 event storage bucket"
-    Value: !Ref FreshtracksUserActivitylogs
-  SaveAuth0EventToS3:
-    Description: "Save Auth0 Event ToS3  Lambda Function ARN"
-    Value: !GetAtt SaveAuth0EventToS3.Arn
+  VUEAPPAuth0Domain:
+    Description: "front end env VUE_APP_Auth0_Domain:  Your Auth0 App account domain."
+    Value: !Ref Auth0Domain
+  VUEAPPAuth0Audience:
+    Description: "front end env VUE_APP_Auth0_Audience: your Auth0 API audience identifier e.g.  https://myfreshtracks.com"
+    Value: !Ref Auth0Audience
+  VUEAPPAuth0ClientId:
+    Description: "front end env VUE_APP_Auth0_ClientId: your Auth0 API audience identifier (is your Auth0 Client ID)"
+    Value: !Ref Auth0ClientId
+  VUEAPPAwsIoTEndpoint:
+    Description: "front end env VUE_APP_AwsIoTEndpoint: Cognito Identity pool for IoT"
+    Value: "go to IOT > Things > fresh-tracks-realtime > Interact. to find the Endpoint"
+  VUEAPPAWSRegion:
+    Description: "front end env VUE_APP_AWSRegion: AWS deployment region"
+    Value: !Ref "AWS::Region"
