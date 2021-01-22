@@ -34,8 +34,8 @@ sam deploy --guided
 ```
 ## Adding the stack outputs to the front end
 The stack outputs must be saved as environment variables for the front end application. 
-* If deploying to your local machine, save these in an .env file in the application root folder.
-* if hosting on AWS Amplify use the [following guide](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html) to create environment variables.
+* If deploying the front end to your local machine, save these in an .env file in the application root folder.
+* if hosting the front end on AWS Amplify, use the [following guide](https://docs.aws.amazon.com/amplify/latest/userguide/environment-variables.html) to create environment variables.
 
 
 ```bash
