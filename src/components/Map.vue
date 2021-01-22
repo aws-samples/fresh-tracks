@@ -65,7 +65,7 @@ import 'leaflet-gpx';
 
 import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from "vue2-leaflet";
 import axios from 'axios';
-require 
+var L = window.L; // to get around the ESLint failure
 
 
 export default {
