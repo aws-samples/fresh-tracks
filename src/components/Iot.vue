@@ -8,12 +8,12 @@ export default {
   created () {
     const AWS = require('aws-sdk')
     const AWSIoTData = require('aws-iot-device-sdk')
-    //console.log('IoT component created')
+    console.log('IoT component created')
     let that = this
 
     // LOOK! YOU WILL NEED TO UPDATE THESE VALUES!
     const currentlySubscribedTopic = 'UpdateTable-'+this.$auth.user.sub
-    //console.log('subscribedto'+'-'+currentlySubscribedTopic)
+    console.log('subscribedto'+'-'+currentlySubscribedTopic)
 
     const AWSConfiguration = {
       poolId: process.env.VUE_APP_IdentityPoolId, // 'YourCognitoIdentityPoolId'
@@ -65,7 +65,7 @@ export default {
     }
 
     mqttClient.on('connect', () => {
-      //console.log('mqttClient connected')
+      console.log('mqttClient connected')
       mqttClient.subscribe(currentlySubscribedTopic)
     })
 
@@ -76,7 +76,7 @@ export default {
 
     mqttClient.on('message', (topic, payload) => {
       const msg = JSON.parse(payload.toString())
-      //console.log('mqttClient message: ', msg)
+      console.log('mqttClient message: ', msg)
       // Send the message back to parent component
       that.$root.$emit('send', msg)
     })

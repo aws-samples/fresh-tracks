@@ -61,11 +61,11 @@
 
 <script>
 import { latLng } from "leaflet";
-import {L} from 'leaflet-gpx';
+import 'leaflet-gpx';
 
 import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from "vue2-leaflet";
 import axios from 'axios';
- 
+require 
 
 
 export default {
@@ -138,7 +138,7 @@ export default {
               this.success = 'Data retrieved successfully';
             //this.response = JSON.stringify(response, null, 2)
               self.gpxfile = response.data
-          
+
             const track = new L.GPX(self.gpxfile, 
               { async: true,
                 gpx_options:{
@@ -180,7 +180,6 @@ export default {
           
             var layer = new L.TileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png');
             mapObject.addLayer(layer);
-          
 
         }).catch(error => {
           
