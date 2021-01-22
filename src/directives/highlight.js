@@ -1,8 +1,8 @@
-import hljs from "highlight.js/lib/highlight";
-import json from "highlight.js/lib/languages/json";
 import "highlight.js/styles/monokai-sublime.css";
+import hljs from 'highlight.js/lib/core';
+import json from 'highlight.js/lib/languages/json';
 
-hljs.registerLanguage("json", json);
+hljs.registerLanguage('json', json);
 
 export default {
   deep: true,
