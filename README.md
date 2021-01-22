@@ -1,7 +1,7 @@
 # Fresh Tracks 
-An event driven serverless web application built in Vue.js. This example app allows you to upload `.gpx` files to view your tracked activities .
+An event driven serverless web application built in Vue.js. This example app allows you to upload `.gpx` files to view your tracked activities.  Try it out at [MyFreshTracks.com](https://myfreshtracks.com)
 
-> :information_source:  set up and deployment time approximately **10 mins**.
+> :information_source:  set up and deployment time is approximately **10 mins**.
 
 > :information_source: **This application uses [Auth0](https://auth0.com/signup)** to manage and Authenticate users. You must create a demo app in Auth0 before you can login, or deploy the backend resources. See [Authentication - Auth0](#Authentication - Auth0).
 
