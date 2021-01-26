@@ -3,7 +3,7 @@ An event driven serverless web application built in Vue.js. This example app all
 
 > :information_source:  set up and deployment time is approximately **10 mins**.
 
-> :information_source: **This application uses [Auth0](https://auth0.com/signup)** to manage and Authenticate users. You must create a demo app in Auth0 before you can login, or deploy the backend resources. See [Authentication - Auth0](#Authentication - Auth0).
+> :information_source: **This application uses [Auth0](https://auth0.com/signup)** to manage and Authenticate users. You must create a demo app in Auth0 before you can login, or deploy the backend resources. See "Authentication - Auth0" below.
 
 
 
