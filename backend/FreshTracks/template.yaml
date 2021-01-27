@@ -61,7 +61,7 @@ Globals:
     EndpointConfiguration: EDGE
     TracingEnabled: TRUE
     Cors: 
-      AllowMethods: "'OPTIONS,POST'"
+      AllowMethods: "'OPTIONS,POST,GET'"
       AllowHeaders: "'Content-Type'"
       AllowOrigin: "'*'"
 Resources:
