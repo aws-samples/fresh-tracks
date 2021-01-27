@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.478.0",
+    "aws-xray-sdk": "^3.2.0",
     "axios": "^0.21.1",
     "fast-xml-parser": "^3.16.0",
     "gpx-parse": "^0.10.4",

@@ -1,4 +1,6 @@
 var AWS = require('aws-sdk');
+const AWSXRay = require('aws-xray-sdk-core')
+
 const dynamoClient = new AWS.DynamoDB()    
 
 const headers = {
