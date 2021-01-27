@@ -1,8 +1,10 @@
-const AWS = require('aws-sdk');
+const AWSXRay = require('aws-xray-sdk-core')
+const AWS = AWSXRay.captureAWS(require('aws-sdk'))
 const DynamoDB = new AWS.DynamoDB()   
 const s3 = new AWS.S3();
 var bucketName = process.env.FreshTracksS3Bucket
-
+const { metricScope } = require("aws-embedded-metrics");
+var ColdStart = true;
 
 const headers = {
   'Content-Type': 'application/json',
@@ -10,7 +12,14 @@ const headers = {
   'Access-Control-Allow-Headers': "Content-Type",
   "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
 }
-exports.handler = async (event) => {
+const metricsaggr = metricScope(metrics => async(event, context) => {
+    metrics.setNamespace("FreshTracks");
+    if (ColdStart) {
+        metrics.putMetric("ColdStart-", 1, "Count");
+        ColdStart = false;
+    } else {
+        metrics.putMetric("WarmStart-", 1, "Count");
+    }  
   let dynamoData=''
   let  file ={}
     let params = {
@@ -48,4 +57,6 @@ exports.handler = async (event) => {
          headers
      };
     return response;
-};
+});
+
+exports.handler = metricsaggr;

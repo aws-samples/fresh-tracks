@@ -1,8 +1,17 @@
 const AWS = require('aws-sdk')
 const iot = new AWS.Iot({apiVersion: '2015-05-28'});
+const { metricScope } = require("aws-embedded-metrics");
+var ColdStart = true;
 
-exports.handler = async(event, context) => {
-      
+const metricsaggr = metricScope(metrics => async(event, context) => {
+    metrics.setNamespace("FreshTracks");
+    if (ColdStart) {
+        metrics.putMetric("ColdStart-", 1, "Count");
+        ColdStart = false;
+    } else {
+        metrics.putMetric("WarmStart-", 1, "Count");
+    }  
+
     var params = {endpointType: 'iot:Data'};
     const iotDataRes = await   iot.describeEndpoint(params).promise();
     
@@ -13,4 +22,5 @@ exports.handler = async(event, context) => {
        
     return res
 
-}
+});
+exports.handler = metricsaggr;

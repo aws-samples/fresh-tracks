@@ -5,6 +5,8 @@ backend/node_modules
 backend/Lambda/node_modules
 #sam
 backend/FreshTracks/samconfig.toml
+backend/FreshTracks/gitignore
+backend/FreshTracks/.aws-sam
 
 
 # local env files

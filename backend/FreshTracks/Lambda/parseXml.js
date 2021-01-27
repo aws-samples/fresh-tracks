@@ -1,8 +1,12 @@
-var AWS = require('aws-sdk');
+const { metricScope } = require("aws-embedded-metrics");
+
+const AWSXRay = require('aws-xray-sdk-core')
+const AWS = AWSXRay.captureAWS(require('aws-sdk'))
+
 var GPX = require("gpx-parse");
 const s3 = new AWS.S3();
 
-
+var ColdStart = true;
 const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
@@ -10,8 +14,15 @@ const headers = {
   "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
 }
 
-exports.handler = async(event, context) => {
-
+const metricsaggr = metricScope(metrics => async(event, context) => {
+    metrics.putDimensions({ Service: "Function-ParseGPX" });  
+    metrics.setNamespace("FreshTracks");
+    if (ColdStart) {
+        metrics.putMetric("ColdStart-", 1, "Count");
+        ColdStart = false;
+    } else {
+        metrics.putMetric("WarmStart-", 1, "Count");
+    }  
 //first we get the XML GPX data from the file
     var params = { 
         Bucket: event.detail.requestParameters.bucketName,
@@ -27,17 +38,19 @@ exports.handler = async(event, context) => {
 
     GPX.parseGpx(gpx, function(error, data) {
 
-        if(typeof data !== 'undefined'){
-            //likely no version data
-            gpxMeta={'name':data.tracks[0].name,'length':data.tracks[0].length(),'time':data.metadata.time}
-        }
-
+    if(typeof data !== 'undefined'){
+        //likely no version data
+        gpxMeta={'name':data.tracks[0].name,'length':data.tracks[0].length(),'time':data.metadata.time}
+    }
+    metrics.setProperty("GPXMetadata", gpxMeta);
+    metrics.putMetric("TracksUploaded", 1, "Count");
     });
 
+    return {
+        statusCode: 200,
+        body: JSON.stringify({gpxMeta:gpxMeta}),
+        headers,
+    }
+});
 
-     return {
-            statusCode: 200,
-            body: JSON.stringify({gpxMeta:gpxMeta}),
-            headers,
-        }
-}
+exports.handler = metricsaggr;

@@ -14,8 +14,12 @@
 */
 
 'use strict'
-var AWS = require('aws-sdk');
+const AWSXRay = require('aws-xray-sdk-core')
+const AWS = AWSXRay.captureAWS(require('aws-sdk'))
 const SES = new AWS.SES()
+const { metricScope } = require("aws-embedded-metrics");
+var ColdStart = true;
+
 
 const headers = {
   'Content-Type': 'application/json',
@@ -24,8 +28,16 @@ const headers = {
   "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
 }
 
-exports.handler = async(event, context) => {
-    const formData = JSON.stringify(event.body,null,2)
+const metricsaggr = metricScope(metrics => async(event, context) => {
+  metrics.setNamespace("FreshTracks");
+  if (ColdStart) {
+      metrics.putMetric("ColdStart-", 1, "Count");
+      ColdStart = false;
+  } else {
+      metrics.putMetric("WarmStart-", 1, "Count");
+  }   
+
+  const formData = JSON.stringify(event.body,null,2)
         // Build params for SES
         const emailParams = {
           Source: process.env.ValidatedEmail, // SES SENDING EMAIL
@@ -54,9 +66,12 @@ exports.handler = async(event, context) => {
         return err
     }
     console.log(data)
-    return {
+    await metrics.flush();
+       return {
           statusCode: 200,
           body: 'OK!',
           headers        
       }
-}
+    });
+
+    exports.handler = metricsaggr;
