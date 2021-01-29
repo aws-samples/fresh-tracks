@@ -56,6 +56,7 @@ const metricsaggr = metricScope(metrics => async(event, context) => {
          body: JSON.stringify(file.Body.toString()),
          headers
      };
+     metrics.putMetric("TracksViewed", 1, "Count");
     return response;
 });
 

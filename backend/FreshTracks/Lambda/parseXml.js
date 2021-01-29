@@ -15,7 +15,7 @@ const headers = {
 }
 
 const metricsaggr = metricScope(metrics => async(event, context) => {
-    metrics.putDimensions({ Service: "Function-ParseGPX" });  
+//    metrics.putDimensions({ Service: "Function-ParseGPX" });  
     metrics.setNamespace("FreshTracks");
     if (ColdStart) {
         metrics.putMetric("ColdStart-", 1, "Count");
