@@ -474,6 +474,10 @@ Resources:
                 - Effect: Allow
                   Action:
                     - "lambda:InvokeFunction"
+                    - "xray:PutTelemetryRecords"
+                    - "xray:GetSamplingRules"
+                    - "xray:GetSamplingTargets"
+                    - "xray:PutTraceSegments"
                   Resource: "*"
 
 ##########################################
