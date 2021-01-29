@@ -53,6 +53,8 @@ Globals:
   Function:
     Timeout: 10
     Tracing: Active
+    Layers:
+      - !Sub "arn:aws:lambda:${AWS::Region}:580247275435:layer:LambdaInsightsExtension:14"
     Tags:
       Application: FreshTracks 
   Api:
@@ -223,6 +225,7 @@ Resources:
         Variables:
           Endpoint: !Ref FreshTracksRealtime
       Policies:
+        - CloudWatchLambdaInsightsExecutionRolePolicy
         - Statement:
           - Effect: Allow
             Action:
@@ -242,6 +245,7 @@ Resources:
         Variables:
           FreshTracksDatabaseTable: !Ref FreshTracksDatabaseTable
       Policies:
+        - CloudWatchLambdaInsightsExecutionRolePolicy
         - DynamoDBCrudPolicy:
             TableName: !Ref FreshTracksDatabaseTable
       Events:
@@ -265,6 +269,7 @@ Resources:
         Variables:
           FreshTracksDatabaseTable: !Ref FreshTracksDatabaseTable
       Policies:
+        - CloudWatchLambdaInsightsExecutionRolePolicy
         - DynamoDBCrudPolicy:
             TableName: !Ref FreshTracksDatabaseTable
       Events:
@@ -289,6 +294,7 @@ Resources:
           FreshTracksDatabaseTable: !Ref FreshTracksDatabaseTable
           FreshTracksS3Bucket: !Ref FreshTracksS3Bucket
       Policies:
+        - CloudWatchLambdaInsightsExecutionRolePolicy
         - DynamoDBCrudPolicy:
             TableName: !Ref FreshTracksDatabaseTable
         - S3CrudPolicy:
@@ -303,20 +309,21 @@ Resources:
             Method: get
             RestApiId: !Ref FreshTracksAPI
   parseGPX:
-      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-      Properties:
-        CodeUri: Lambda/
-        Handler: parseXml.handler
-        Runtime: nodejs12.x
-        MemorySize: 128
-        Environment:
-          Variables:
-            FreshTracksDatabaseTable: !Ref FreshTracksDatabaseTable
-        Policies:
-          - DynamoDBCrudPolicy:
-              TableName: !Ref FreshTracksDatabaseTable
-          - S3CrudPolicy:
-              BucketName: !Ref FreshTracksS3Bucket  
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: Lambda/
+      Handler: parseXml.handler
+      Runtime: nodejs12.x
+      MemorySize: 128
+      Environment:
+        Variables:
+          FreshTracksDatabaseTable: !Ref FreshTracksDatabaseTable
+      Policies:
+        - CloudWatchLambdaInsightsExecutionRolePolicy
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FreshTracksDatabaseTable
+        - S3CrudPolicy:
+            BucketName: !Ref FreshTracksS3Bucket  
   getSignedUrlS3:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -328,6 +335,7 @@ Resources:
         Variables:
           FreshTracksS3Bucket: !Ref FreshTracksS3Bucket
       Policies:
+        - CloudWatchLambdaInsightsExecutionRolePolicy
         - S3CrudPolicy:
             BucketName: !Ref FreshTracksS3Bucket
       Events:
@@ -389,7 +397,6 @@ Resources:
   FreshTracksGPXUploadMachine:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
-
       DefinitionString: !Sub |
               {
                 "Comment": "Process GPX file upload",
