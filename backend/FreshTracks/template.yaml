@@ -395,36 +395,32 @@ Resources:
 #   STEP FUNCTION                                                        #
 ##########################################################################
   FreshTracksGPXUploadMachine:
-    Type: "AWS::StepFunctions::StateMachine"
+    Type: "AWS::Serverless::StateMachine"
     Properties:
-      DefinitionString: !Sub |
-              {
-                "Comment": "Process GPX file upload",
-                "StartAt": "parseGPX",
-                "States": {
-                  "parseGPX": {
-                    "Type": "Task",
-                    "ResultPath": "$.Metadata",
-                    "Resource":
-                      "${parseGPX.Arn}",
-                    "Next": "SaveToDb"
-                  },
-                 "SaveToDb": {
-                    "Type": "Task",
-                    "ResultPath": "$.dbRes",
-                    "Resource":"${saveToFreshTracksDatabaseTable.Arn}",
-                    "Next": "publishToIoT"
-                  },
-                  "publishToIoT":{
-                  "Type": "Task",
-                    "Resource":"${publishToIoT.Arn}",
-                    "End":true
-                  }
-                }
-              }
-      RoleArn: !GetAtt [ MyStatesExecutionRole, Arn ]
-      TracingConfiguration: 
-        Enabled: True   
+      Definition:
+        Comment: Process GPX file upload
+        StartAt: parseGPX
+        States:
+          parseGPX:
+            Type: Task
+            ResultPath: "$.Metadata"
+            Resource: !GetAtt parseGPX.Arn
+            Next: SaveToDb
+          SaveToDb:
+            Type: Task
+            ResultPath: "$.dbRes"
+            Resource: !GetAtt saveToFreshTracksDatabaseTable.Arn
+            Next: publishToIoT
+          publishToIoT:
+            Type: Task
+            Resource: !GetAtt publishToIoT.Arn
+            End: true
+      Role: !GetAtt MyStatesExecutionRole.Arn
+      Tracing:
+        Enabled: True
+
+
+        
 ##########################################################################
 #   Roles                                                                #
 ##########################################################################
