@@ -214,11 +214,11 @@ Resources:
 ##########################################################################
 #  Lambda functions                                                      #
 ##########################################################################
-  publishToIoT:
+  PublishToIoT:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: Lambda/
-      Handler: publishToIoT.handler
+      Handler: PublishToIoT.handler
       Runtime: nodejs12.x
       MemorySize: 128
       Environment:
@@ -234,11 +234,11 @@ Resources:
               - "*"
           Version: '2012-10-17'
 
-  saveToFreshTracksDatabaseTable:
+  SaveTrackToDatabase:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: Lambda/
-      Handler: dynamodb.handler
+      Handler: SaveTrackToDatabase.handler
       Runtime: nodejs12.x
       MemorySize: 128
       Environment:
@@ -258,11 +258,11 @@ Resources:
             Method: post
             RestApiId: !Ref FreshTracksAPI
 
-  getActivitiesForUser:
+  GetActivitiesForUser:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: Lambda/
-      Handler: DynamoDbGet.handler
+      Handler: GetActivitiesForUser.handler
       Runtime: nodejs12.x
       MemorySize: 128
       Environment:
@@ -282,11 +282,11 @@ Resources:
             Method: get
             RestApiId: !Ref FreshTracksAPI
 
-  getActivity:
+  GetActivity:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: Lambda/
-      Handler: getS3FileString.handler
+      Handler: GetActivity.handler
       Runtime: nodejs12.x
       MemorySize: 128
       Environment:
@@ -308,11 +308,11 @@ Resources:
             Path: '/activity'
             Method: get
             RestApiId: !Ref FreshTracksAPI
-  parseGPX:
+  ParseGPXFile:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: Lambda/
-      Handler: parseXml.handler
+      Handler: ParseGPXFile.handler
       Runtime: nodejs12.x
       MemorySize: 128
       Environment:
@@ -399,21 +399,21 @@ Resources:
     Properties:
       Definition:
         Comment: Process GPX file upload
-        StartAt: parseGPX
+        StartAt: ParseGPXFile
         States:
-          parseGPX:
+          ParseGPXFile:
             Type: Task
             ResultPath: "$.Metadata"
-            Resource: !GetAtt parseGPX.Arn
-            Next: SaveToDb
-          SaveToDb:
+            Resource: !GetAtt ParseGPXFile.Arn
+            Next: SaveTrackToDatabase
+          SaveTrackToDatabase:
             Type: Task
             ResultPath: "$.dbRes"
-            Resource: !GetAtt saveToFreshTracksDatabaseTable.Arn
-            Next: publishToIoT
-          publishToIoT:
+            Resource: !GetAtt SaveTrackToDatabase.Arn
+            Next: PublishToIoT
+          PublishToIoT:
             Type: Task
-            Resource: !GetAtt publishToIoT.Arn
+            Resource: !GetAtt PublishToIoT.Arn
             End: true
       Role: !GetAtt MyStatesExecutionRole.Arn
       Tracing:
