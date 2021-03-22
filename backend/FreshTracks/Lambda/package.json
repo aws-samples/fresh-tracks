@@ -4,7 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "resolutions": {
+    "is-svg": "^4.2.2",
+    "ssri": "^8.0.1"
   },
   "keywords": [],
   "author": "Ben Smith, Amazon Web Services",
