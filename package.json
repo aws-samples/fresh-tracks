@@ -9,7 +9,7 @@
     "preinstall": "npx npm-force-resolutions"
   },
   "resolutions": {
-    "ssri": "^8.0.1",
+    "ssri": ">=8.0.1",
     "is-svg": "^4.2.2"
   },
   "dependencies": {
