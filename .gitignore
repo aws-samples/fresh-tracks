@@ -1,6 +1,9 @@
 .DS_Store
 node_modules
 /dist
+package-lock.json
+
+
 backend/node_modules
 backend/Lambda/node_modules
 #sam
