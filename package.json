@@ -39,7 +39,8 @@
     "vue-router": "^3.5.1",
     "vue-upload-component": "^2.8.22",
     "vue2-leaflet": "^2.6.0",
-    "vue2-leaflet-height-graph": "^0.1.2"
+    "vue2-leaflet-height-graph": "^0.1.2",
+    "y18n": "^5.0.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
